@@ -58,6 +58,9 @@ df5.rename(columns={"Price": "Date"}, inplace=True)
 df5["Date"] = df5["Date"].apply(custom_func)
 df5["Close"] = df5["Close"].astype(float)
 
+df5 = df5[["Close", 'Volume', 'Date']]
+
+
 def getPast10(index):
     values = []
     for i in range(10, 0, -1):
@@ -73,27 +76,32 @@ def getPast10Volumes(index):
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.fc1 = nn.Linear(10, 16)
-        self.fc2 = nn.Linear(16, 8)
-        self.fc3 = nn.Linear(8, 4)
+        self.fc1 = nn.Linear(20, 528)
+        self.fc2 = nn.Linear(528, 256)
+        self.fc3 = nn.Linear(256, 128)
+        self.fc4 = nn.Linear(128, 64)
+        self.fc5 = nn.Linear(64, 4)
         self.out = nn.Linear(4, 1)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
+        x = F.relu(self.fc5(x))
         x = self.out(x)
         return x
 
 
 torch.manual_seed(41)
 model = Model()
-
+accuracy = 0
+questions = 0
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 df = None
-for i in range(4):
+for i in range(5):
     if i == 0:
         df = df1
     elif i == 1:
@@ -110,7 +118,7 @@ for i in range(4):
 
     for i in range(10, len(df)):
         X.append(getPast10(i)+getPast10Volumes(i))
-        y.append(float(df1.iloc[i]["Close"]))
+        y.append(float(df.iloc[i]["Close"]))
 
     X = torch.FloatTensor(X)
     y = torch.FloatTensor(y).reshape(-1, 1)
@@ -118,7 +126,7 @@ for i in range(4):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
 
-    epochs = 100
+    epochs = 50
 
     for i in range(epochs):
         y_pred = model(X_train)
