@@ -101,12 +101,15 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 df = None
-for i in range(5):
+for i in range(20):
     if i == 0:
+        print("")
         df = df1
     elif i == 1:
+        print("")
         df = df2
     elif i ==2:
+        print("")
         df = df3
     elif i == 3:
         df = df4
