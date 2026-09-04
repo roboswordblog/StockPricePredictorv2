@@ -39,9 +39,30 @@ def custom_func(x):
     x = str(x)
     return float(x.split("-")[0] + x.split("-")[1] + x.split("-")[2])
 
-df.rename(columns={"Price": "Date"}, inplace=True)
-df["Date"] = df["Date"].apply(custom_func)
-df["Close"] = df["Close"].astype(float)
+df1.rename(columns={"Price": "Date"}, inplace=True)
+df1["Date"] = df1["Date"].apply(custom_func)
+df1["Close"] = df1["Close"].astype(float)
+
+
+df2.rename(columns={"Price": "Date"}, inplace=True)
+df2["Date"] = df["Date"].apply(custom_func)
+df2["Close"] = df["Close"].astype(float)
+
+
+df3.rename(columns={"Price": "Date"}, inplace=True)
+df3["Date"] = df["Date"].apply(custom_func)
+df3["Close"] = df["Close"].astype(float)
+
+
+
+df4.rename(columns={"Price": "Date"}, inplace=True)
+df4["Date"] = df["Date"].apply(custom_func)
+df4["Close"] = df["Close"].astype(float)
+
+
+df5.rename(columns={"Price": "Date"}, inplace=True)
+df5["Date"] = df["Date"].apply(custom_func)
+df5["Close"] = df["Close"].astype(float)
 
 def getPast10(index):
     values = []
@@ -61,7 +82,7 @@ y = []
 
 for i in range(10, len(df)):
     X.append(getPast10(i)+getPast10Volumes(i))
-    y.append(float(df.iloc[i]["Close"]))
+    y.append(float(df1.iloc[i]["Close"]))
 
 X = torch.FloatTensor(X)
 y = torch.FloatTensor(y).reshape(-1, 1)
