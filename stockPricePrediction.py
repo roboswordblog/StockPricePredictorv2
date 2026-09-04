@@ -98,34 +98,36 @@ model = Model()
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-X = []
-y = []
 
-for i in range(10, len(df)):
-    X.append(getPast10(i)+getPast10Volumes(i))
-    y.append(float(df1.iloc[i]["Close"]))
+for i in range(4):
+    X = []
+    y = []
 
-X = torch.FloatTensor(X)
-y = torch.FloatTensor(y).reshape(-1, 1)
+    for i in range(10, len(df)):
+        X.append(getPast10(i)+getPast10Volumes(i))
+        y.append(float(df1.iloc[i]["Close"]))
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
+    X = torch.FloatTensor(X)
+    y = torch.FloatTensor(y).reshape(-1, 1)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
 
-epochs = 100
+    epochs = 100
 
-for i in range(epochs):
-    y_pred = model(X_train)
-    loss = criterion(y_pred, y_train)
+    for i in range(epochs):
+        y_pred = model(X_train)
+        loss = criterion(y_pred, y_train)
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-    if i % 10 == 0:
-        print(f"Epoch {i}, Loss: {loss.item()}")
+        if i % 10 == 0:
+            print(f"Epoch {i}, Loss: {loss.item()}")
 
-with torch.no_grad():
-    test_pred = model(X_test)
-    test_loss = criterion(test_pred, y_test)
+    with torch.no_grad():
+        test_pred = model(X_test)
+        test_loss = criterion(test_pred, y_test)
 
-print(f"Test Loss: {test_loss.item()}")
+    print(f"Test Loss: {test_loss.item()}")
