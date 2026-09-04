@@ -1,1 +1,1 @@
-In this folder, I will store the entire history of all the stock prices for 20 of the biggest companies, and i will use it to train the model.
+In this folder, I will store the entire history of all the stock prices for 5(right now later 10) of the biggest companies, and i will use it to train the model.

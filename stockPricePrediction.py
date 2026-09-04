@@ -6,9 +6,34 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv("AAPL.csv")
-df = df.drop(columns=["Open", "High", "Low"])
-df = df.iloc[2:].reset_index(drop=True)
+df1 = pd.read_csv("data/AAPL.csv")
+df2 = pd.read_csv("data/NVDA.csv")
+df3 = pd.read_csv("data/GOOGLE.csv")
+df4 = pd.read_csv("data/MSFT.csv")
+df5 = pd.read_csv("data/AMZN.csv")
+
+df1 = df.drop(columns=["Open", "High", "Low"])
+df1 = df.iloc[2:].reset_index(drop=True)
+
+df2 = df.drop(columns=["Open", "High", "Low"])
+df2 = df.iloc[2:].reset_index(drop=True)
+
+df2 = df.drop(columns=["Open", "High", "Low"])
+df2 = df.iloc[2:].reset_index(drop=True)
+
+df2 = df.drop(columns=["Open", "High", "Low"])
+df2 = df.iloc[2:].reset_index(drop=True)
+
+
+df3 = df.drop(columns=["Open", "High", "Low"])
+df3 = df.iloc[2:].reset_index(drop=True)
+
+df4 = df.drop(columns=["Open", "High", "Low"])
+df4 = df.iloc[2:].reset_index(drop=True)
+
+
+df5 = df.drop(columns=["Open", "High", "Low"])
+df5 = df.iloc[2:].reset_index(drop=True)
 
 def custom_func(x):
     x = str(x)
