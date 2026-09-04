@@ -76,19 +76,6 @@ def getPast10Volumes(index):
         values.append(float(df.iloc[index - i]["Volume"]))
     return values
 
-
-X = []
-y = []
-
-for i in range(10, len(df)):
-    X.append(getPast10(i)+getPast10Volumes(i))
-    y.append(float(df1.iloc[i]["Close"]))
-
-X = torch.FloatTensor(X)
-y = torch.FloatTensor(y).reshape(-1, 1)
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
-
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
@@ -104,11 +91,25 @@ class Model(nn.Module):
         x = self.out(x)
         return x
 
+
 torch.manual_seed(41)
 model = Model()
 
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+X = []
+y = []
+
+for i in range(10, len(df)):
+    X.append(getPast10(i)+getPast10Volumes(i))
+    y.append(float(df1.iloc[i]["Close"]))
+
+X = torch.FloatTensor(X)
+y = torch.FloatTensor(y).reshape(-1, 1)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
+
 
 epochs = 100
 
