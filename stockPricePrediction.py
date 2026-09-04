@@ -6,34 +6,28 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 
-df1 = pd.read_csv("data/AAPL.csv")
-df2 = pd.read_csv("data/NVDA.csv")
-df3 = pd.read_csv("data/GOOGLE.csv")
+df1 = pd.read_csv("data/APPL.csv")
+df2 = pd.read_csv("data/nvda.csv")
+df3 = pd.read_csv("data/google.csv")
 df4 = pd.read_csv("data/MSFT.csv")
 df5 = pd.read_csv("data/AMZN.csv")
 
-df1 = df.drop(columns=["Open", "High", "Low"])
-df1 = df.iloc[2:].reset_index(drop=True)
+df1 = df1.drop(columns=["Open", "High", "Low"])
+df1 = df1.iloc[2:].reset_index(drop=True)
 
-df2 = df.drop(columns=["Open", "High", "Low"])
-df2 = df.iloc[2:].reset_index(drop=True)
-
-df2 = df.drop(columns=["Open", "High", "Low"])
-df2 = df.iloc[2:].reset_index(drop=True)
-
-df2 = df.drop(columns=["Open", "High", "Low"])
-df2 = df.iloc[2:].reset_index(drop=True)
+df2 = df2.drop(columns=["Open", "High", "Low"])
+df2 = df2.iloc[2:].reset_index(drop=True)
 
 
-df3 = df.drop(columns=["Open", "High", "Low"])
-df3 = df.iloc[2:].reset_index(drop=True)
+df3 = df3.drop(columns=["Open", "High", "Low"])
+df3 = df3.iloc[2:].reset_index(drop=True)
 
-df4 = df.drop(columns=["Open", "High", "Low"])
-df4 = df.iloc[2:].reset_index(drop=True)
+df4 = df4.drop(columns=["Open", "High", "Low"])
+df4 = df4.iloc[2:].reset_index(drop=True)
 
 
-df5 = df.drop(columns=["Open", "High", "Low"])
-df5 = df.iloc[2:].reset_index(drop=True)
+df5 = df5.drop(columns=["Open", "High", "Low"])
+df5 = df5.iloc[2:].reset_index(drop=True)
 
 def custom_func(x):
     x = str(x)
@@ -45,24 +39,24 @@ df1["Close"] = df1["Close"].astype(float)
 
 
 df2.rename(columns={"Price": "Date"}, inplace=True)
-df2["Date"] = df["Date"].apply(custom_func)
-df2["Close"] = df["Close"].astype(float)
+df2["Date"] = df2["Date"].apply(custom_func)
+df2["Close"] = df2["Close"].astype(float)
 
 
 df3.rename(columns={"Price": "Date"}, inplace=True)
-df3["Date"] = df["Date"].apply(custom_func)
-df3["Close"] = df["Close"].astype(float)
+df3["Date"] = df3["Date"].apply(custom_func)
+df3["Close"] = df3["Close"].astype(float)
 
 
 
 df4.rename(columns={"Price": "Date"}, inplace=True)
-df4["Date"] = df["Date"].apply(custom_func)
-df4["Close"] = df["Close"].astype(float)
+df4["Date"] = df4["Date"].apply(custom_func)
+df4["Close"] = df4["Close"].astype(float)
 
 
 df5.rename(columns={"Price": "Date"}, inplace=True)
-df5["Date"] = df["Date"].apply(custom_func)
-df5["Close"] = df["Close"].astype(float)
+df5["Date"] = df5["Date"].apply(custom_func)
+df5["Close"] = df5["Close"].astype(float)
 
 def getPast10(index):
     values = []
@@ -98,8 +92,19 @@ model = Model()
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-
+df = None
 for i in range(4):
+    if i == 0:
+        df = df1
+    elif i == 1:
+        df = df2
+    elif i ==2:
+        df = df3
+    elif i == 3:
+        df = df4
+    elif i == 4:
+        df = df5
+
     X = []
     y = []
 
