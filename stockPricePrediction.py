@@ -58,7 +58,7 @@ df5.rename(columns={"Price": "Date"}, inplace=True)
 df5["Date"] = df5["Date"].apply(custom_func)
 df5["Close"] = df5["Close"].astype(float)
 
-df5 = df5[["Close", 'Volume', 'Date']]
+df5 = df5[["Close", 'Volume', 'Date', ]]
 
 
 def getPast10(index):
