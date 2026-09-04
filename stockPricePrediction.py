@@ -18,15 +18,15 @@ df.rename(columns={"Price": "Date"}, inplace=True)
 df["Date"] = df["Date"].apply(custom_func)
 df["Close"] = df["Close"].astype(float)
 
-def getPast5(index):
+def getPast10(index):
     values = []
-    for i in range(5, 0, -1):
+    for i in range(10, 0, -1):
         values.append(float(df.iloc[index - i]["Close"]))
     return values
 
-def getPast5Volumes(index):
+def getPast10Volumes(index):
     values = []
-    for i in range(5, 0, -1):
+    for i in range(10, 0, -1):
         values.append(float(df.iloc[index - i]["Volume"]))
     return values
 
@@ -34,8 +34,8 @@ def getPast5Volumes(index):
 X = []
 y = []
 
-for i in range(5, len(df)):
-    X.append(getPast5(i)+getPast5Volumes(i))
+for i in range(10, len(df)):
+    X.append(getPast10(i)+getPast10Volumes(i))
     y.append(float(df.iloc[i]["Close"]))
 
 X = torch.FloatTensor(X)
