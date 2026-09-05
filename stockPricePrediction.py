@@ -83,13 +83,19 @@ class Model(nn.Module):
         self.fc3 = nn.Linear(256, 128)
         self.fc4 = nn.Linear(128, 64)
         self.fc5 = nn.Linear(64, 4)
+        self.dropout = nn.Dropout(0.2)
+        self.hiddenDropout = nn.Dropout(0.4)
         self.out = nn.Linear(4, 1)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
+        x = self.dropout(x)
         x = F.relu(self.fc2(x))
+        x = self.hiddenDropout(x)
         x = F.relu(self.fc3(x))
+        x = self.hiddenDropout(x)
         x = F.relu(self.fc4(x))
+        x = self.hiddenDropout(x)
         x = F.relu(self.fc5(x))
         x = self.out(x)
         return x
@@ -100,7 +106,7 @@ model = Model()
 accuracy = 0
 questions = 0
 criterion = nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 testLosses = []
 
 df = None
