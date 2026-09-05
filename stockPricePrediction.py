@@ -1,5 +1,3 @@
-#This is not included in the readme, but im gonna make it better than the rest
-# im gonna use a boiler plat like the otherones, and start with like feature engineering, and changing the epochs and lr, and some layers.
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -12,21 +10,21 @@ df3 = pd.read_csv("data/google.csv")
 df4 = pd.read_csv("data/MSFT.csv")
 df5 = pd.read_csv("data/AMZN.csv")
 
-df1 = df1.drop(columns=["Open", "High", "Low"])
+#df1 = df1.drop(columns=["Close", "Open"])
 df1 = df1.iloc[2:].reset_index(drop=True)
 
-df2 = df2.drop(columns=["Open", "High", "Low"])
+#df2 = df2.drop(columns=["Close", "Open"])
 df2 = df2.iloc[2:].reset_index(drop=True)
 
 
-df3 = df3.drop(columns=["Open", "High", "Low"])
+#df3 = df3.drop(columns=["Close", "Open"])
 df3 = df3.iloc[2:].reset_index(drop=True)
 
-df4 = df4.drop(columns=["Open", "High", "Low"])
+#df4 = df4.drop(columns=["Close", "Open"])
 df4 = df4.iloc[2:].reset_index(drop=True)
 
 
-df5 = df5.drop(columns=["Open", "High", "Low"])
+#df5 = df5.drop(columns=["Close", "Open"])
 df5 = df5.iloc[2:].reset_index(drop=True)
 
 def custom_func(x):
@@ -58,13 +56,11 @@ df5.rename(columns={"Price": "Date"}, inplace=True)
 df5["Date"] = df5["Date"].apply(custom_func)
 df5["Close"] = df5["Close"].astype(float)
 
-df5 = df5[["Close", 'Volume', 'Date', ]]
-
 
 def getPast10(index):
     values = []
     for i in range(10, 0, -1):
-        values.append(float(df.iloc[index - i]["Close"]))
+        values.append(float(df.iloc[index - i]["High"]+df.iloc[index - i]["Low"])/2)  # get the average of the close and the open
     return values
 
 def getPast10Volumes(index):
@@ -73,10 +69,16 @@ def getPast10Volumes(index):
         values.append(float(df.iloc[index - i]["Volume"]))
     return values
 
+def getPast10HighCloseRatio(index)
+    values = []
+    for i in range(10, 0, -1):
+        values.append(float(df.iloc[index - i]["Open"]+df.iloc[index - i]["Close"])/2)
+    return values
+
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.fc1 = nn.Linear(20, 528)
+        self.fc1 = nn.Linear(30, 528)
         self.fc2 = nn.Linear(528, 256)
         self.fc3 = nn.Linear(256, 128)
         self.fc4 = nn.Linear(128, 64)
@@ -137,20 +139,34 @@ for i in range(20):
 
     elif i == 11:
         df = df2
-    
+    elif  i == 12:
+        df =  df3
+    elif i == 13:
+        df = df4
+    elif i == 14:
+        df = df5
+    elif i == 15:
+        df = df1
+    elif i == 16:
+        df = df2
+    elif i == 17:
+        df = df3
+    elif i == 18:
+        df = df4
+    elif i == 19:
+        df = df5
 
     X = []
     y = []
 
     for i in range(10, len(df)):
-        X.append(getPast10(i)+getPast10Volumes(i))
+        X.append(getPast10(i)+getPast10Volumes(i)+getPast10HighCloseRatio(i)x)
         y.append(float(df.iloc[i]["Close"]))
 
     X = torch.FloatTensor(X)
     y = torch.FloatTensor(y).reshape(-1, 1)
-
+                                                                                                        
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
-
 
     epochs = 50
 
