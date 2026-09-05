@@ -60,7 +60,7 @@ df5["Close"] = df5["Close"].astype(float)
 def getPast10(index):
     values = []
     for i in range(10, 0, -1):
-        values.append(float(df.iloc[index - i]["High"]+df.iloc[index - i]["Low"])/2)  # get the average of the close and the open
+        values.append(float(df.iloc[index - i]["High"])+float(df.iloc[index - i]["Low"])/2)  # get the average of the close and the open
     return values
 
 def getPast10Volumes(index):
@@ -69,10 +69,10 @@ def getPast10Volumes(index):
         values.append(float(df.iloc[index - i]["Volume"]))
     return values
 
-def getPast10HighCloseRatio(index)
+def getPast10HighCloseRatio(index):
     values = []
     for i in range(10, 0, -1):
-        values.append(float(df.iloc[index - i]["Open"]+df.iloc[index - i]["Close"])/2)
+        values.append(float(df.iloc[index - i]["Open"])+float(df.iloc[index - i]["Close"])/2)
     return values
 
 class Model(nn.Module):
@@ -101,6 +101,7 @@ accuracy = 0
 questions = 0
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+testLosses = []
 
 df = None
 for i in range(20):
@@ -160,7 +161,7 @@ for i in range(20):
     y = []
 
     for i in range(10, len(df)):
-        X.append(getPast10(i)+getPast10Volumes(i)+getPast10HighCloseRatio(i)x)
+        X.append(getPast10(i)+getPast10Volumes(i)+getPast10HighCloseRatio(i))
         y.append(float(df.iloc[i]["Close"]))
 
     X = torch.FloatTensor(X)
@@ -178,11 +179,14 @@ for i in range(20):
         loss.backward()
         optimizer.step()
 
-        if i % 10 == 0:
+        if i % 5 == 0:
             print(f"Epoch {i}, Loss: {loss.item()}")
 
     with torch.no_grad():
         test_pred = model(X_test)
         test_loss = criterion(test_pred, y_test)
+        testLosses.append(test_loss.item())
 
     print(f"Test Loss: {test_loss.item()}")
+print("-----------------------------")
+print(f"Test Losses: {testLosses}")
