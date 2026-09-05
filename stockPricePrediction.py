@@ -113,8 +113,31 @@ for i in range(20):
         df = df3
     elif i == 3:
         df = df4
+
     elif i == 4:
         df = df5
+
+    elif i == 5:
+        df = df1
+    
+    elif i == 6:
+        df = df2
+    
+    elif i == 7:
+        df = df3
+    
+    elif i == 8:
+        df = df4 
+    
+    elif i == 9:
+        df = df5
+    
+    elif i == 10:
+        df = df1
+
+    elif i == 11:
+        df = df2
+    
 
     X = []
     y = []
