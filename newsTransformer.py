@@ -13,3 +13,14 @@ def clean_text(text):
 train_df['text'] = train_df['text'].apply(clean_text)
 test_df['text'] = test_df['text'].apply(clean_text)
 
+tokenizer = BertTokenizer.from_pretrained('distilbert-base-uncased')
+
+def tokenize_text(texts, tokenizer, max_length=128):
+    encodings = tokenizer(
+        list(texts),
+        max_length=max_length,
+        padding='max_length',
+        truncation=True,
+        return_tensors='pt'
+    )
+    return encodings['input_ids'], encodings['attention_mask']
