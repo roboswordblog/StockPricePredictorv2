@@ -78,26 +78,23 @@ def getPast10HighCloseRatio(index):
 class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.fc1 = nn.Linear(30, 528)
-        self.fc2 = nn.Linear(528, 256)
-        self.fc3 = nn.Linear(256, 128)
-        self.fc4 = nn.Linear(128, 64)
-        self.fc5 = nn.Linear(64, 4)
-        self.dropout = nn.Dropout(0.2)
-        self.hiddenDropout = nn.Dropout(0.4)
-        self.out = nn.Linear(4, 1)
+        self.net = nn.Sequential(
+            nn.Linear(30, 128),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+
+            nn.Linear(64, 4),
+            nn.ReLU(),
+
+            nn.Linear(4, 1)
+        )
 
     def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = self.dropout(x)
-        x = F.relu(self.fc2(x))
-        x = self.hiddenDropout(x)
-        x = F.relu(self.fc3(x))
-        x = self.hiddenDropout(x)
-        x = F.relu(self.fc4(x))
-        x = self.hiddenDropout(x)
-        x = F.relu(self.fc5(x))
-        x = self.out(x)
+        x = self.net(x)
         return x
 
 
@@ -168,14 +165,19 @@ for i in range(20):
 
     for i in range(10, len(df)):
         X.append(getPast10(i)+getPast10Volumes(i)+getPast10HighCloseRatio(i))
-        y.append(float(df.iloc[i]["Close"]))
+        y.append(
+    (float(df.iloc[i]["Close"]) -
+     float(df.iloc[i-1]["Close"]))
+    / float(df.iloc[i-1]["Close"])
+)
+
 
     X = torch.FloatTensor(X)
     y = torch.FloatTensor(y).reshape(-1, 1)
                                                                                                         
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
-    epochs = 50
+    epochs = 500
 
     for i in range(epochs):
         y_pred = model(X_train)
